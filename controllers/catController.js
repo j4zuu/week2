@@ -1,8 +1,6 @@
 'use strict';
 const catModel = require('../models/catModel');
 
-const cats = catModel.cats;
-
 const cat_list_get = async (req, res) => {
   const cats = await catModel.getAllCats();
   res.json(cats);
@@ -26,7 +24,8 @@ const cat_update = async (req, res) => {
 }
 
 const cat_delete = async (req, res) => {
-  res.send("deleted...")
+  const deleted = await catModel.deleteCat(req.params.id)
+  res.send(`deleted... ${deleted}`)
 }
 
 module.exports = {

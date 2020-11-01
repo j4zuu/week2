@@ -44,10 +44,21 @@ const updateCat = async(id, req) => {
   }
 }
 
+const deleteCat = async (id) => {
+  try {
+    const [rows] = await promisePool.query('DELETE FROM wop_cat WHERE cat_id = ?;',
+        [id])
+    return rows.affectedRows === 1;
+  } catch (e) {
+    return false;
+  }
+}
+
 //TODO: delete function, no return needed? just best effort
 module.exports = {
   getAllCats,
   getCat,
   insertCat,
-  updateCat
+  updateCat,
+  deleteCat
 };

@@ -11,6 +11,8 @@ router.get('/:id', catController.get_cat_by_id);
 
 router.post('/', upload.single('cat'), catController.cat_create);
 
-router.get('/:id', catController.get_cat_by_id)
+router.put('/', catController.cat_update)
+
+router.delete('/:id', catController.cat_delete)
 
 module.exports = router;

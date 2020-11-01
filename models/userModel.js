@@ -1,19 +1,53 @@
 'use strict';
-const users = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@metropolia.fi',
-    password: '1234',
-  },
-  {
-    id: '2',
-    name: 'Jane Doez',
-    email: 'jane@metropolia.fi',
-    password: 'qwer',
-  },
-];
+const pool = require('../database/db');
+const promisePool = pool.promise();
 
+const getAllUsers = async () => {
+  try {
+    // TODO: do the LEFT (or INNER) JOIN to get owner name too.
+    const [rows] = await promisePool.query('SELECT * FROM wop_user');
+    return rows;
+  } catch (e) {
+    console.log('userModel: ', e.message);
+  }
+};
+
+const getUser = async (id) => {
+  try {
+    // TODO: do the LEFT (or INNER) JOIN to get owner name too.
+    const [rows] = await promisePool.query(`SELECT * FROM wop_user WHERE user_id = ?`, [id]);
+    return rows[0];
+  } catch (e) {
+    console.log('userModel: ', e.message);
+  }
+};
+
+const insertUser = async (req) => {
+  try {
+    const [rows] = await  promisePool.query('INSERT INTO wop_user (name, email, password) VALUES (?, ?, ?);',
+        [req.body.name, req.body.email, req.body.password]);
+    return rows.insertId;
+  }
+  catch (e){
+    console.error('userModel insertUser, e')
+    return 0
+  }
+}
+
+const updateUser = async(id, req) => {
+  try {
+    const [rows] = await promisePool.query('UPDATE wop_user SET name = ?, email = ?, password = ?, WHERE user_id = ?;',
+        [req.body.name, req.body.email, req.body.password])
+    return rows.affectedRows === 1;
+  } catch (e) {
+    return false;
+  }
+}
+
+//TODO: delete function, no return needed? just best effort
 module.exports = {
-  users,
+  getAllUsers,
+  getUser,
+  insertUser,
+  updateUser
 };
