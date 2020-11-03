@@ -11,6 +11,8 @@ const cors = require('cors')
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 
+app.use(express.static('uploads'))
+
 app.use('/', rootRoute);
 app.use('/cat', catRoute);
 app.use('/user', userRoute)

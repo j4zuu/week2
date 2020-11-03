@@ -36,8 +36,8 @@ const insertCat = async (req) => {
 
 const updateCat = async(id, req) => {
   try {
-    const [rows] = await promisePool.query('UPDATE wop_cat SET name = ?, age = ?, wight = ?, WHERE cat_id = ?;',
-        [req.body.name, req.body.age, req.body.weight, req.body.id])
+    const [rows] = await promisePool.query('UPDATE wop_cat SET name = ?, age = ?, wight = ?, owner = ? WHERE cat_id = ?;',
+        [req.body.name, req.body.age, req.body.weight, req.body.owner, req.body.id])
     return rows.affectedRows === 1;
   } catch (e) {
     return false;
