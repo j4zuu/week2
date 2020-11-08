@@ -13,7 +13,6 @@ const get_cat_by_id = async (req, res) => {
 }
 
 const cat_create = async (req, res) => {
-  console.log(req.body, req.file)
   const errors = validationResult(req);
   if (!errors.isEmpty()){
     return res.status(400).json({errors: errors.array()})
@@ -24,6 +23,10 @@ const cat_create = async (req, res) => {
 }
 
 const cat_update = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array()})
+  }
   const updateOk = await catModel.updateCat(req)
   res.json(`{message: "updated... ${updateOk}"}`)
 }

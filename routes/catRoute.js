@@ -4,7 +4,18 @@ const {body} = require('express-validator')
 const multer = require(('multer'))
 const catController = require('../controllers/catController');
 const router = express.Router()
-const upload = multer({dest: 'uploads/' })
+
+const fileFilter = (req, file, cb) => {
+  if(!file.mimetype.includes('image')){
+    return cb(null, false, new Error('not an image'))
+  }
+  else {
+    cb(null, true);
+  }
+}
+const upload = multer({dest: 'uploads/', fileFilter })
+
+
 
 const injectFile = (req, res, next) => {
   if (req.file){
@@ -27,7 +38,14 @@ router.post('/',
     catController.cat_create);
 
 router.get('/:id', catController.get_cat_by_id);
-router.put('/', catController.cat_update)
+router.put('/',
+    [
+      body('name', 'can not be empty').isLength({min: 1}),
+      body('age', 'can not be empty, must be a number').isLength({min: 1}).isNumeric,
+      body('weight', 'can not be empty, must be a number').isLength({min: 1}).isNumeric,
+      body('owner', 'required').isLength({min: 1}).isNumeric,
+    ],
+    catController.cat_update)
 router.delete('/:id', catController.cat_delete)
 
 module.exports = router;
